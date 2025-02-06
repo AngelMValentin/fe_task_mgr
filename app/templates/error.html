@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+
+{% block title %}Error ({{error}}){% endblock title %}
+
+{% block content %}
+<h1>Error ({{error}})</h1>
+<p>The operation you attemped fauled with the following status code: {{ error }}.</p>
+<p>Please tru again later or contact an administrator if the issue persists.</p>
+{% endblock content %}
