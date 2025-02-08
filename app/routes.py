@@ -5,6 +5,7 @@ from flask import (
 )
 import requests
 
+
 app = Flask(__name__)
 
 BACKEND_URL = "http://127.0.0.1:5000/tasks"
@@ -50,5 +51,33 @@ def edit_task(pk):
         render_template("error.html", error=response.status_code),
         response.status_code
     )
+
+@app.delete("/tasks/<int:pk>")
+def delete_task(pk):
+    url = f"{BACKEND_URL}/{pk}"
+    response = requests.delete(url)
+    if response.status_code == 204:
+        return render_template("success.html", message="Task deleted successfully!")
+    return (
+        render_template("error.html", error=response.status_code),
+        response.status_code
+    )
+
+# @app.post("/tasks")
+# def create_task():
+#     task_data = requests.jsontask.create_task(task_data)
+#     return "", 204
+
+@app.post("/tasks/create")
+def create_task():
+    task_data = flask_request.form 
+    response = requests.post(BACKEND_URL, json=task_data)
+    if response.status_code == 204:
+        return render_template("success.html", message="Task created successfully!")
+    return (
+        render_template("error.html", error=response.status_code),
+        response.status_code
+    )
+
     
     # assignment is to have full crud support 2/5/25
