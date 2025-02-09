@@ -3,9 +3,9 @@
 {% block title %}Tasks{% endblock title %}
 
 {% block content %}
-<h1>Tasks</h1>
+<h1 class="text-center pb-3 pt-3">Tasks</h1>
 <table class="table">
-    <thead>
+    <thead class="ms-0">
       <tr>
         <th scope="col">ID</th>
         <th scope="col">Name</th>
@@ -21,7 +21,13 @@
         <td>{{ task['name'] }}</td>
         <td>{{ task['summary'] }}</td>
         <td>{{ task['description'] }}</td>
-        <td>View | Edit | Delete</td>
+        <td>
+          <a href="{{ url_for('edit_form', pk=task['id']) }}" class="btn btn-outline-info btn-sm">Edit</a> 
+          <form action="{{ url_for('delete_task', pk=task['id']) }}" method="post" style="display:inline;">
+              <button type="submit" class="btn btn-outline-danger btn-sm mt-1 p-0.5">Delete</button>
+          </form>
+      </td>
+      
       </tr>
       {% endfor %}
     </tbody>
