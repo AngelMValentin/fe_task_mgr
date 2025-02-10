@@ -4,6 +4,7 @@ from flask import (
     request as flask_request
 )
 import requests
+import json
 
 
 app = Flask(__name__)
@@ -43,11 +44,12 @@ def edit_form(pk):
         response.status_code
     )
 
-@app.post("/tasks/<int:pk>")
+@app.put("/tasks/<int:pk>/edit")
 def edit_task(pk):
-    url = "%s/%s" % (BACKEND_URL, pk)
+    url = f"{BACKEND_URL}/{pk}/edit"
     form_data = dict(flask_request.form)
-    response = requests.put(url, json=form_data)
+    json_data = json.dumps(form_data)
+    response = requests.put(url, json=json_data)
     if response.status_code == 204:
         return render_template("success.html", message="Task edited")
     return (
@@ -69,7 +71,8 @@ def delete_task(pk):
 @app.post("/tasks/create")
 def create_task():
     task_data = flask_request.form 
-    response = requests.post(BACKEND_URL, json=task_data)
+    json_data = json.dumps(task_data)
+    response = requests.post(BACKEND_URL, json=json_data)
     if response.status_code == 204:
         return render_template("success.html", message="Task created successfully!")
     return (
