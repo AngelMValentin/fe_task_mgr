@@ -44,11 +44,11 @@ def edit_form(pk):
         response.status_code
     )
 
-@app.put("/tasks/<int:pk>/edit")
+@app.put("/tasks/<int:pk>")
 def edit_task(pk):
-    url = f"{BACKEND_URL}/{pk}/edit"
-    form_data = dict(flask_request.form)
-    json_data = json.dumps(form_data)
+    url = f"{BACKEND_URL}/{pk}"
+    # form_data = dict(flask_request.form)
+    json_data = requests.get(url)
     response = requests.put(url, json=json_data)
     if response.status_code == 204:
         return render_template("success.html", message="Task edited")
