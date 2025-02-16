@@ -5,15 +5,18 @@
 {% block content %}
 <h1>Create Task</h1>
 <form method="post" action="{{ url_for('create_task') }}">
-    <label>Name:</label>
-    <input type="text" name="name" required>
-    
-    <label>Summary:</label>
-    <input type="text" name="summary" required>
-
-    <label>Description:</label>
-    <textarea name="description" required></textarea>
-
-    <button type="submit">Create Task</button>
+    <div class="form-floating mb-3">
+        <input required type="text" class="form-control" id="floatingInput" placeholder="Your Name">
+        <label for="floatingInput">Name:</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input required type="text" class="form-control" id="floatingPassword" placeholder="Your Task Summary">
+        <label for="floatingPassword">Summary</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input required type="text" class="form-control" id="floatingPassword" placeholder="Your Task Description">
+        <label for="floatingPassword">Description</label>
+    </div>
+    <button class="btn btn-sm btn-outline-success" type="submit">Create Task</button>
 </form>
 {% endblock content %}

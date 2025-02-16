@@ -2,8 +2,23 @@
 
 
 {% block title %}Home{% endblock title %}
+{% block head %}
+    <style>
+        .home {
+            background-image: url(/img/task\ manager\ home.png);
+            background-size: cover;
+        }
+        .picture {
+            width: 30px;
+            height: 30px;
+        }
+    </style>
+    <!-- I am trying to add css but it isn't working and I think it has to do with jinja -->
+{%endblock%}
 
 {% block content %}
-<h1>Home</h1>
-<p>Welcome to my home page!</p>
+<div class="home">
+    <h1 class="text-center">Your favorite task manager</h1>
+    <p>Welcome to my home page!</p>
+</div>
 {% endblock content %}

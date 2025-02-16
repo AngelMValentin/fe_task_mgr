@@ -1,7 +1,8 @@
 from flask import (
     Flask,
     render_template,
-    request as flask_request
+    request as flask_request,
+    jsonify
 )
 import requests
 import json
@@ -19,6 +20,10 @@ def home():
 def about():
     return render_template("about.html")
 
+@app.get("/create")
+def create():
+    return render_template("create.html")
+
 @app.get("/tasks")
 def task_list():
     response = requests.get(BACKEND_URL)
@@ -30,28 +35,25 @@ def task_list():
         response.status_code
     )
 
-@app.get("/tasks/<int:pk>")
+@app.get("/tasks/<int:pk>/edit")
 def edit_form(pk):
     url = "%s/%s" % (BACKEND_URL, pk)
     response = requests.get(url)
     if response.status_code == 200:
         single_task = response.json().get("task")
-        if not single_task:
-            return render_template("error.html", error="Task not found"), 404
         return render_template("edit.html", task=single_task)
     return (
         render_template("error.html", error=response.status_code),
         response.status_code
     )
 
-@app.put("/tasks/<int:pk>")
+@app.post("/tasks/<int:pk>/edit")
 def edit_task(pk):
-    url = f"{BACKEND_URL}/{pk}"
-    # form_data = dict(flask_request.form)
-    json_data = requests.get(url)
-    response = requests.put(url, json=json_data)
+    task_data = flask_request.form
+    url = "%s/%s" % (BACKEND_URL, pk)
+    response = requests.put(url, json=task_data)
     if response.status_code == 204:
-        return render_template("success.html", message="Task edited")
+        return render_template("success.html", message="Task edited successfully!")
     return (
         render_template("error.html", error=response.status_code),
         response.status_code
@@ -63,16 +65,19 @@ def delete_task(pk):
     response = requests.delete(url)
     if response.status_code == 204:
         return render_template("success.html", message="Task deleted successfully!")
-    return render_template("error.html", error=response.status_code), response.status_code
+    return (
+        render_template("error.html", error=response.status_code), 
+        response.status_code
+    )
 
 
 
 
 @app.post("/tasks/create")
 def create_task():
-    task_data = flask_request.form 
-    json_data = json.dumps(task_data)
-    response = requests.post(BACKEND_URL, json=json_data)
+    task_data = flask_request.form.to_dict(flat=True)
+    jsonify(task_data)
+    response = requests.post(BACKEND_URL, json=task_data)
     if response.status_code == 204:
         return render_template("success.html", message="Task created successfully!")
     return (
